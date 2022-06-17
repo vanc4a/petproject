@@ -1,0 +1,8 @@
+{
+    "name": "serverside",
+    "version": "1.0.0",
+    "dependencies": {
+        "mysql2": "^2.3.3",
+        "uuid": "^8.3.2"
+    }
+}

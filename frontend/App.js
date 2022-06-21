@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -8,16 +8,20 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import SignIn from './components/SignIn';
+import SignBlank from './components/SignBlank';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 
 const App = () => {
 
+  const [status,setStatus] = useState(<SignBlank />)
+
+
   return (
     <NavigationContainer>
-      <SignIn />
+      {status}
     </NavigationContainer>
   );
 };

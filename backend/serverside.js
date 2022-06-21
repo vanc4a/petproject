@@ -19,6 +19,7 @@ http.createServer((request,response) => {
         token: null,
         error: null,
         role: 'user',
+        aciton: null
     }
 
     const responseEnd = () => {
@@ -27,7 +28,7 @@ http.createServer((request,response) => {
 
     request.on('data',data => {
         data = JSON.parse(`${data}`)
-
+        responseObject.aciton = data.process
         switch(data.process){
             case 'log':
                 connection.query(`SELECT * FROM users WHERE login = "${data.login}" AND password = "${data.pass}"`,(err,res) => {

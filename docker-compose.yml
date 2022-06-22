@@ -1,0 +1,24 @@
+services: 
+  mysql_server:
+    image: mysql
+    build: ./db_migration
+    environment: 
+      - MYSQL_DATABASE=pet_project
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=1234
+      - MYSQL_ROOT_PASSWORD=1234
+    volumes:
+      - db:/var/lib/mysql
+  app:
+    restart: always
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports: 
+      - 3000:3000
+    volumes: 
+      - ./backend:/app
+    depends_on: 
+      - mysql_server
+volumes: 
+  db:

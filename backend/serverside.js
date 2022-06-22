@@ -1,6 +1,8 @@
 const http = require("http");
 const uuid = require('uuid');
 const mysql = require('mysql2');
+ 
+console.log(1234568904)
 
 const connection = mysql.createConnection({
     host: "mysql_server",
@@ -39,6 +41,7 @@ http.createServer((request,response) => {
                 })
                 break
             case 'reg':
+                console.log("ree eg")
                 connection.query(`SELECT * FROM users WHERE login = "${data.login}"`,(err,res) => {
                     !res.length ?
                     (
@@ -62,5 +65,5 @@ http.createServer((request,response) => {
         }
     })
 
-}).listen(3000,'localhost',() => console.log('Server start!'))
+}).listen(3000,'app',() => console.log('Server start!'))
 

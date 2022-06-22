@@ -2,11 +2,11 @@
 
 ### Run the project
 
-For run *mysql* and *node* containers
-`docker-compose up`
-
-Rebuild containers
+Build and rebuild containers
 `docker-compose up --build`
+
+For run **mysql** and **node** containers
+`docker-compose up`
 
 ### Stop the project
 

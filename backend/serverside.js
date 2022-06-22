@@ -3,10 +3,10 @@ const uuid = require('uuid');
 const mysql = require('mysql2');
 
 const connection = mysql.createConnection({
-    host: "localhost",
-    user: "root",
+    host: "mysql_server",
+    user: "test",
     database: "pet_project",
-    password: "52875287"
+    password: "1234"
 })
 
 const Errors = {IncorrectLogOrPass : 'Incorrect login or password!', AlreadyInUse: 'Login already in use!', UndefinedUser: 'Undefined user!'}

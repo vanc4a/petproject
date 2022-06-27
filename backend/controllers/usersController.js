@@ -1,10 +1,11 @@
-const mysql = require('mysql2');
 const UserRepository = require('../repositories/UserRepository')
 const ValidationRepository = require('../repositories/ValidationRepository')
 const ResponseObject = require('../models/ResponseObject')
 
 const userRepository = new UserRepository();
 const validationRepository = new ValidationRepository();
+
+const notValid = new ResponseObject(null,'Only latters and numbers!',null)
 
 exports.signIn = (request,response) => {
     request.on('data',data =>{
@@ -13,7 +14,7 @@ exports.signIn = (request,response) => {
             userRepository.signIn(data.pass,data.login).then(res => response.send(JSON.stringify(res)))
         }
         else{
-            response.send(JSON.stringify(new ResponseObject(null,'Only latters and numbers!',null)))
+            response.send(JSON.stringify(notValid))
         }
     })
 
@@ -26,7 +27,7 @@ exports.signUp = (request,response) => {
             userRepository.signUp(data.pass,data.login).then(res => response.send(JSON.stringify(res)))
         }
         else{
-            response.send(JSON.stringify(new ResponseObject(null,'Only latters and numbers!',null)))
+            response.send(JSON.stringify(notValid))
         }
     })
 }

@@ -37,18 +37,21 @@ module.exports = class UserRepository {
     signIn(password,login){
         return this.getById(login).then(user => {
             if(user){
-                if(!user.token){
-                    user.token = uuid.v4();
-                    connection.query(mysqlRequests.setToken,[user.token,login])
-                }
                 return passwordHash.verify(password, user.password) ? 
-                (new ResponseObject(user.token,null,user.user_role)) :
+                (this.setToken(user),new ResponseObject(user.token,null,user.user_role)) :
                 new ResponseObject(null,Errors.IncorrectLogOrPass,null)
             }
             else {
                 return new ResponseObject(null,Errors.UndefinedUser,null)
             }
         })
+    }
+
+    setToken(user){
+        if(!user.token){
+            user.token = uuid.v4();
+            connection.query(mysqlRequests.setToken,[user.token,user.login])
+        }
     }
 
     signUp(password, login){

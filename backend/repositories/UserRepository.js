@@ -1,6 +1,12 @@
 const mysql = require('mysql2');
 const User = require('../models/User');
-const uuid = require('uuid')
+const ResponseObject = require('../models/ResponseObject')
+
+const Errors = {
+    IncorrectLogOrPass : 'Incorrect login or password!', 
+    AlreadyInUse: 'Login already in use!', 
+    UndefinedUser: 'Undefined user!',
+}
 
 const connection = mysql.createConnection({
     host: "mysql_server",
@@ -26,18 +32,21 @@ module.exports = class UserRepository {
     signIn(password,login){
         return this.getById(login).then(user => {
             if(user){
-                return user.password == password ? {token: user.token,role: user.user_role} : null
+                return user.password == password ? new ResponseObject(user.token,null,user.user_role) : new ResponseObject(null,Errors.IncorrectLogOrPass,null)
             }
-            return null
+            else {
+                return new ResponseObject(null,Errors.UndefinedUser,null)
+            }
         })
     }
 
     signUp(password, login){
-        this.getById(login).then(user => {
+        return this.getById(login).then(user => {
             if(!user){
-                connection.query(mysqlRequests.registration,[login,password,uuid.v4(),'user']).then((err,res) => {
-                    console.log(err)
-                })
+                return connection.query(mysqlRequests.registration,[login,password,'1234','user']).then(() => new ResponseObject(null,null,null))
+            }
+            else {
+                return new ResponseObject(null,Errors.AlreadyInUse,null)
             }
         })
     }

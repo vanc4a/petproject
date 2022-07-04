@@ -1,9 +1,20 @@
-const ContentRepository = require('../repositories/ContentRepository')
+const PostsRepository = require('../repositories/PostsRepository')
 
-const contentRepository = new ContentRepository();
+const postsRepository = new PostsRepository();
 
-exports.getUserPost = (request,response) => {response.send('User posts')}
-exports.getAllPost = (request,response) => {response.send('All posts')}
+exports.getUserPost = (request,response) => {
+    request.on('data',data =>{
+        data = JSON.parse(`${data}`)
+        console.log(data)
+        postsRepository.getUserPosts(data.token).then(res => response.send(JSON.stringify(res)))
+    })
+}
+exports.getAllPost = (request,response) => {
+    request.on('data',data =>{
+        data = JSON.parse(`${data}`)
+        console.log(data)
+        postsRepository.getAllPosts(data.token).then(res => response.send(JSON.stringify(res)))
+    })}
 exports.getUserProfile = (request,response) => {
     response.send('{"name":"test"}')
 }

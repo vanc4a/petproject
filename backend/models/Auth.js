@@ -1,4 +1,4 @@
-module.exports = class ResponseObject {
+module.exports = class AuthObject {
     constructor(token,err,role){
         this.token = token,
         this.error = err,

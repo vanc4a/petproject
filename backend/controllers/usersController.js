@@ -1,11 +1,11 @@
 const UserRepository = require('../repositories/UserRepository')
 const ValidationRepository = require('../repositories/ValidationRepository')
-const ResponseObject = require('../models/ResponseObject')
+const Auth = require('../models/Auth')
 
 const userRepository = new UserRepository();
 const validationRepository = new ValidationRepository();
 
-const notValid = new ResponseObject(null,'Only latters and numbers!',null)
+const notValid = new Auth(null,'Only latters and numbers!',null)
 
 exports.signIn = (request,response) => {
     request.on('data',data =>{

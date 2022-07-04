@@ -3,7 +3,7 @@ const uuid = require('uuid')
 var passwordHash = require('password-hash');
 
 const User = require('../models/User');
-const ResponseObject = require('../models/ResponseObject');
+const Auth = require('../models/Auth');
 
 const Errors = {
     IncorrectLogOrPass : 'Incorrect login or password!', 
@@ -30,7 +30,7 @@ module.exports = class UserRepository {
         
         return connection.query(mysqlRequests.login,[id]).then(res => {
             res = res[0][0]
-            return res ? new User(res.login,res.password,res.token,res.user_role) : null
+            return res ? new User(res.login,res.password,res.token,res.user_role,res.id) : null
         })
     }
 
@@ -38,11 +38,11 @@ module.exports = class UserRepository {
         return this.getById(login).then(user => {
             if(user){
                 return passwordHash.verify(password, user.password) ? 
-                (this.setToken(user),new ResponseObject(user.token,null,user.user_role)) :
-                new ResponseObject(null,Errors.IncorrectLogOrPass,null)
+                (this.setToken(user),new Auth(user.token,null,user.user_role)) :
+                new Auth(null,Errors.IncorrectLogOrPass,null)
             }
             else {
-                return new ResponseObject(null,Errors.UndefinedUser,null)
+                return new Auth(null,Errors.UndefinedUser,null)
             }
         })
     }
@@ -58,10 +58,10 @@ module.exports = class UserRepository {
         return this.getById(login).then(user => {
             if(!user){
                 return connection.query(mysqlRequests.registration,[login,passwordHash.generate(password),'user'])
-                .then(() => new ResponseObject(null,null,null))
+                .then(() => new Auth(null,null,null))
             }
             else {
-                return new ResponseObject(null,Errors.AlreadyInUse,null)
+                return new Auth(null,Errors.AlreadyInUse,null)
             }
         })
     }

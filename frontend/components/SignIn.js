@@ -1,10 +1,12 @@
 import React,{useState} from "react";
-import {View,Image,Dimensions,TextInput,Text,Pressable} from 'react-native';
+import {View,Image,Dimensions,TextInput,Text,Pressable,StyleSheet} from 'react-native';
+import FetchRepository from "../repositories/FetchRepository";
 
 const {width,height} = Dimensions.get('window');
 const interval = width/15;
+const fetchRepository = new FetchRepository();
 
-const SignIn = ({setError,authStatus}) => {
+const SignIn = ({setError,setToken}) => {
 
     const [login,setLogin] = useState(null);
     const [pass,setPass] = useState(null);
@@ -13,42 +15,39 @@ const SignIn = ({setError,authStatus}) => {
         <TextInput onChangeText={setLogin}
         value={login}
         placeholder='Login'
-        style={{height:interval*1.5,alignSelf:'stretch',borderBottomWidth:interval/15,marginBottom:interval/2,fontSize:interval/1.5,borderColor:'#bdc3c7'}
-        }/>
+        style={styles.input}/>
         <TextInput onChangeText={setPass}
         value={pass}
         placeholder='Password'
         secureTextEntry={true}
-        style={{height:interval*1.5,alignSelf:'stretch',borderBottomWidth:interval/15,marginBottom:interval/2,fontSize:interval/1.5,borderColor:'#bdc3c7'}
-        }/>
-        <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+        style={styles.input}/>
+        <View style={styles.signContainer}>
         <Text style={{fontSize:interval,color:'#7f8c8d'}}>Sign in</Text>
-        <Pressable onPress={() => {
-                    fetch('http://100.126.58.52:3000/users/signin',{
-                        method  : 'POST',
-                        header : {
-                        Accept  : 'application/json',
-                        'Content-Type' : 'application/json'
-                        },
-                        body :  `{"login":"${login}","pass":"${pass}"}`
-                        })
-                        .then(
-                            response => {
-                                return response.json()
-                            })
-                        .then(json => {
-                            if(json.error){
-                                setError({status:true,text:json.error})
-                            }
-                            else {
-                                authStatus(true)
-                            }
-                        });     
-                    }}>
-            <Image source={require('../img/arrow2.png')} style={{width:interval*2,height:interval*2}}/>
+        <Pressable onPress={() => {fetchRepository.SignIn(login,pass,setToken,setError)}}>
+            <Image source={require('../img/arrow2.png')} style={styles.arrow}/>
         </Pressable>
         </View>
     </View>)
 }
 
 export default SignIn;
+
+const styles = StyleSheet.create({
+    input: {
+        height:interval*1.5,
+        alignSelf:'stretch',
+        borderBottomWidth:interval/15,
+        marginBottom:interval/2,
+        fontSize:interval/1.5,
+        borderColor:'#bdc3c7'
+    },
+    signContainer : {
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center'
+    },
+    arrow:{
+        width:interval*2,
+        height:interval*2
+    },
+});

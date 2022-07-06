@@ -20,17 +20,16 @@ const Tab = createBottomTabNavigator();
 
 const App = () => {
 
-  const [authStatus,setStatus] = useState(false);
-  const [token,setToken] = useState('3c6d022a-156d-4557-ac8e-7e7f88f0c2d2');
+  const [token,setToken] = useState(null);
 
   return (
     <NavigationContainer>
-      {authStatus ? 
+      {token ? 
       <Tab.Navigator screenOptions={{headerShown: false,tabBarActiveTintColor: '#e74c3c',}}>
-        <Tab.Screen name='Profile' component={Profile} token={token} authStatus={setStatus}/>
+        <Tab.Screen name='Profile' component={Profile}/>
         <Tab.Screen name='Posts' component={Posts}/>
       </Tab.Navigator> : 
-      <SignBlank setStatus={setStatus}/>}
+      <SignBlank setToken={setToken}/>}
     </NavigationContainer>
   );
 };

@@ -9,7 +9,7 @@ const Posts = () => {
 
 
     return (<SafeAreaView style={{backgroundColor:'white',flex:1,justifyContent:'center',padding:interval*2}}>
-        <Text>Profile</Text>
+        <Text>Posts</Text>
     </SafeAreaView>)
 }
 

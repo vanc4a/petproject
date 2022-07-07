@@ -1,20 +1,27 @@
 import React,{useState,useEffect} from "react";
 import {View,Image,Dimensions,TextInput,Text,Pressable,SafeAreaView,FlatList,StyleSheet} from 'react-native';
+import FetchRepository from "../repositories/FetchRepository";
 
 const {width,height} = Dimensions.get('window');
 const interval = width/15;
-
+const fetchRepository = new FetchRepository()
 
 const DATA = [
-    {color: "#81ecec"},
-    {color: "#a29bfe"},
-    {color: "#7f8fa6"},
-    {color: "#fab1a0"},
-    {color: "#fd79a8"},
-    {color: "#ffeaa7"},
+    {color: "#b2bec3"},
+    {color: "#b2bec3"},
+    {color: "#b2bec3"},
+    {color: "#b2bec3"},
+    {color: "#b2bec3"},
+    {color: "#b2bec3"},
 ]
 
-const Profile = () => {
+const Profile = ({token,setToken}) => {
+
+    const [name,setName] = useState('username')
+    
+    useEffect(() => {
+        fetchRepository.getProfile(token,setToken,setName)
+    })
 
     const ItemRender = ({item}) => {
         return (<View style={[styles.postItem,{backgroundColor:item.color}]} />)
@@ -25,7 +32,7 @@ const Profile = () => {
             <View style={styles.rowContainer}>
             <View style={{alignItems:'center'}}>
             <View style={styles.icon}/>
-            <Text style={{fontSize:interval,color:'black'}}>@{'username'}</Text>
+            <Text style={{fontSize:interval,color:'black'}}>@{name}</Text>
             </View>
             <View style={{alignItems:'center'}}>
                 <Text style={[styles.profileText,{marginBottom:interval}]}>Posts</Text>
@@ -39,7 +46,6 @@ const Profile = () => {
         renderItem={ItemRender}
         data={DATA}/> 
         </View>
-        
     </SafeAreaView>)
 }
 

@@ -8,7 +8,7 @@ const interval = width/15
 
 const SignBlank = ({setToken}) => {
 
-    const [process,setProcess] = useState(false)
+    const [process,setProcess] = useState(true)
     const [error,setError] = useState({status: false,text:'123'});
 
     return (<SafeAreaView style={styles.container}>

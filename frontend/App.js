@@ -26,7 +26,7 @@ const App = () => {
     <NavigationContainer>
       {token ? 
       <Tab.Navigator screenOptions={{headerShown: false,tabBarActiveTintColor: '#e74c3c',}}>
-        <Tab.Screen name='Profile' component={Profile}/>
+        <Tab.Screen name='Profile' children={() => <Profile token={token} setToken={setToken} />}/>
         <Tab.Screen name='Posts' component={Posts}/>
       </Tab.Navigator> : 
       <SignBlank setToken={setToken}/>}

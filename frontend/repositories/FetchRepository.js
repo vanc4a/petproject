@@ -1,6 +1,6 @@
 class FetchRepository {
     getFetch(route,request){
-        return fetch(`http://100.126.58.160:3000/${route}`,{
+        return fetch(`http://192.168.2.231:3000/${route}`,{
                         method  : 'POST',
                         header : {
                         Accept  : 'application/json',
@@ -32,6 +32,14 @@ class FetchRepository {
         let requestObject = JSON.stringify({token:token})
         this.getFetch('content/userprofile',requestObject).then(res => {
             res.error ? setToken(null) : setName(res.name)
+        })
+    }
+
+    getUserPosts(token,setToken,setPosts){
+        let requestObject = JSON.stringify({token:token})
+        this.getFetch('content/userposts',requestObject).then(res => {
+            console.log(res)
+            res.error ? setToken(null) : setPosts(res.posts)
         })
     }
 }

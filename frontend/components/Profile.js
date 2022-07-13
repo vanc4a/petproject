@@ -6,25 +6,18 @@ const {width,height} = Dimensions.get('window');
 const interval = width/15;
 const fetchRepository = new FetchRepository()
 
-const DATA = [
-    {color: "#b2bec3"},
-    {color: "#b2bec3"},
-    {color: "#b2bec3"},
-    {color: "#b2bec3"},
-    {color: "#b2bec3"},
-    {color: "#b2bec3"},
-]
-
 const Profile = ({token,setToken}) => {
 
-    const [name,setName] = useState('username')
+    const [name,setName] = useState('username');
+    const [posts,setPosts] = useState([]);
     
     useEffect(() => {
         fetchRepository.getProfile(token,setToken,setName)
-    })
+        fetchRepository.getUserPosts(token,setToken,setPosts)
+    },[name])
 
     const ItemRender = ({item}) => {
-        return (<View style={[styles.postItem,{backgroundColor:item.color}]} />)
+        return (<View style={[styles.postItem,{backgroundColor:item.image}]} />)
     }
 
     return (<SafeAreaView style={styles.container}>
@@ -34,9 +27,15 @@ const Profile = ({token,setToken}) => {
             <View style={styles.icon}/>
             <Text style={{fontSize:interval,color:'black'}}>@{name}</Text>
             </View>
-            <View style={{alignItems:'center'}}>
+            <View>
+                <View style={{alignItems:'center'}}>
+                <Text style={styles.profileText}>{posts.length}</Text>
                 <Text style={[styles.profileText,{marginBottom:interval}]}>Posts</Text>
+                </View>
+                <View style={{alignItems:'center'}}>
+                <Text style={styles.profileText}>0</Text>
                 <Text style={styles.profileText}>Followers</Text>
+                </View>
             </View>
             </View>
         </View>
@@ -44,7 +43,9 @@ const Profile = ({token,setToken}) => {
         <FlatList 
         numColumns={3}
         renderItem={ItemRender}
-        data={DATA}/> 
+        data={posts}
+        ListEmptyComponent={<Text style={styles.profileText} >No posts yet.</Text>}
+        /> 
         </View>
     </SafeAreaView>)
 }
@@ -69,13 +70,14 @@ const styles = StyleSheet.create({
         backgroundColor:'#f2f2f2',
         borderRadius:interval/2,
         padding:interval/2,
-        margin:interval/2
+        margin:interval/2,
+        marginBottom:width/2
     },
     rowContainer: {
         justifyContent:'space-evenly',
         flexDirection:'row',
         alignItems:'center',
-        alignSelf:'stretch'
+        alignSelf:'stretch',
     },
     postItem: {
         width:width/3.5,
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
         borderRadius:width
     },
     profileText: {
-        fontSize:interval,
+        fontSize:interval/1.4,
         color:'#b2bec3'
     }
 });

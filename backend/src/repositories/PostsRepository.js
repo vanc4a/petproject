@@ -1,11 +1,8 @@
 const User = require("../models/User");
 const mysql = require('mysql2');
-
-const mysqlRequests = {
-    getByToken : 'SELECT * FROM users WHERE token = ?',
-    userPosts: 'SELECT * FROM posts WHERE user_id = ?',
-    allPosts: 'SELECT * FROM posts'
-}
+const Posts = require('../responseModels/Posts')
+const mysqlRequests = require('../constants/mysqlRequests')
+const Errors = require('../constants/errors')
 
 const connection = mysql.createConnection({
     host: "mysql_server",
@@ -21,29 +18,31 @@ module.exports = class PostsRepository {
             return res ? new User(res.login,res.password,res.token,res.user_role,res.id) : null
         })
     }
+    
     getUserPosts(token){
         return this.getByToken(token).then(user => {
             if(user){
                 return connection.query(mysqlRequests.userPosts,[user.id]).then(res =>{
                     res = res[0]
-                    return res ? {error: null,posts: res} : {error: null,posts: null}
+                    return new Posts(null,res)
                 })
             }
             else {
-                return {error: 'undefined user',posts: null}
+                return new Posts(Errors.UndefinedUser,null)
             }
         })
     }
+
     getAllPosts(token){
         return this.getByToken(token).then(res =>{
             if(res){
                 return connection.query(mysqlRequests.allPosts).then(posts => {
                     posts = posts[0]
-                    return {error: null, posts: posts}
+                    return new Posts(null,posts)
                 })
             }
             else {
-                return {error: 'Undefined user', posts:null}
+                return new Posts(Errors.UndefinedUser,null)
             }
         })
     }

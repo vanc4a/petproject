@@ -1,10 +1,8 @@
 const express = require('express');
 const app = express();
 
-const usersRouter = require('./routes/usersRouter')
-const contentRouter = require('./routes/contentRouter')
+const Router = require('./src/Router')
 
-app.use('/users',usersRouter)
-app.use('/content',contentRouter)
+app.use('',Router)
 
 app.listen(3000)

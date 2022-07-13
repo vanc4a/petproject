@@ -1,15 +1,10 @@
 const mysql = require('mysql2');
 const uuid = require('uuid')
 var passwordHash = require('password-hash');
-
+const mysqlRequests = require('../constants/mysqlRequests')
 const User = require('../models/User');
-const Auth = require('../models/Auth');
-
-const Errors = {
-    IncorrectLogOrPass : 'Incorrect login or password!', 
-    AlreadyInUse: 'Login already in use!', 
-    UndefinedUser: 'Undefined user!',
-}
+const Auth = require('../responseModels/Auth');
+const Errors = require('../constants/errors')
 
 const connection = mysql.createConnection({
     host: "mysql_server",
@@ -18,13 +13,7 @@ const connection = mysql.createConnection({
     password: "1234"
 }).promise();
 
-const mysqlRequests = {
-    login : 'SELECT * FROM users WHERE login = ?',
-    registration: 'INSERT INTO users(login,password,user_role) VALUES(?,?,?)',
-    setToken: 'UPDATE users set token = ? WHERE login = ?'
-}
-
-module.exports = class UserRepository {
+module.exports = class UsersRepository {
 
     getById(id){
         
@@ -63,6 +52,22 @@ module.exports = class UserRepository {
             else {
                 return new Auth(null,Errors.AlreadyInUse,null)
             }
+        })
+    }
+
+    getByToken(token){
+        return connection.query(mysqlRequests.getByToken,[token]).then(res => {
+            res = res[0][0]
+            return res ? new User(res.login,res.password,res.token,res.user_role,res.id) : null
+        })
+    }
+
+    getProfile(token){
+        return this.getByToken(token).then(user => {
+            if(user){
+                return {error:null,name:user.login}
+            }
+            return {error:'Undefined user',name:null}
         })
     }
 }

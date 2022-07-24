@@ -1,5 +1,6 @@
 module.exports = mysqlRequests = {
     getByToken : 'SELECT * FROM users WHERE token = ?',
+    getById: 'SELECT * FROM users WHERE id = ?',
     userPosts: 'SELECT * FROM posts WHERE user_id = ?',
     allPosts: 'SELECT * FROM posts',
     login : 'SELECT * FROM users WHERE login = ?',

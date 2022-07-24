@@ -2,18 +2,18 @@ const PostsRepository = require('../repositories/PostsRepository')
 
 const postsRepository = new PostsRepository();
 
-exports.getUserPost = (request,response) => {
-    request.on('data',data =>{
-        data = JSON.parse(`${data}`)
-
-        postsRepository.getUserPosts(data.token).then(res => response.send(JSON.stringify(res)))
-    })
+exports.getByToken = (request,response) => {
+        data = request.headers.token
+        postsRepository.getUserPosts(data).then(res => response.send(JSON.stringify(res)))
 }
 
-exports.getAllPost = (request,response) => {
-    request.on('data',data =>{
-        data = JSON.parse(`${data}`)
+exports.getAll = (request,response) => {
+        data = request.headers.token
+        postsRepository.getAllPosts(data).then(res => response.send(JSON.stringify(res)))
+}
 
-        postsRepository.getAllPosts(data.token).then(res => response.send(JSON.stringify(res)))
-    })
+exports.getById = (request,response) => {
+    // data = request.headers.token
+    // postsRepository.getAllPosts(data).then(res => response.send(JSON.stringify(res)))
+    response.send(JSON.stringify({test:213}))
 }

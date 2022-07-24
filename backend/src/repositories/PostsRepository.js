@@ -1,15 +1,9 @@
 const User = require("../models/User");
-const mysql = require('mysql2');
 const Posts = require('../responseModels/Posts')
 const mysqlRequests = require('../constants/mysqlRequests')
 const Errors = require('../constants/errors')
+const connection = require('../constants/mysqlConnection')
 
-const connection = mysql.createConnection({
-    host: "mysql_server",
-    user: "test",
-    database: "pet_project",
-    password: "1234"
-}).promise();
 
 module.exports = class PostsRepository {
     getByToken(token){

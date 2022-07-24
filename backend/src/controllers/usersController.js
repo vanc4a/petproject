@@ -8,21 +8,21 @@ const validator = new Validator();
 const notValid = new Auth(null,'Only latters and numbers!',null)
 
 exports.signIn = (request,response) => {
-    request.on('data',data =>{
-        data = JSON.parse(`${data}`)
+    request.on('data',req => {
+        data = JSON.parse(`${req}`)
         if(validator.getValidation(data.login)){
             usersRepository.signIn(data.pass,data.login).then(res => response.send(JSON.stringify(res)))
-        }
+            }
         else{
             response.send(JSON.stringify(notValid))
         }
     })
-
 }
 
 exports.signUp = (request,response) => {
-    request.on('data',data =>{
-        data = JSON.parse(`${data}`)
+    console.log(req.target)
+    request.on('data',req => {
+        data = JSON.parse(`${req}`)
         if(validator.getValidation(data.login)){
             usersRepository.signUp(data.pass,data.login).then(res => response.send(JSON.stringify(res)))
         }
@@ -32,9 +32,12 @@ exports.signUp = (request,response) => {
     })
 }
 
-exports.getUserProfile = (request,response) => {
-    request.on('data',data =>{
-        data = JSON.parse(`${data}`)
-        usersRepository.getProfile(data.token).then(res => response.send(JSON.stringify(res)))
-    })
+exports.getUserProfileByToken = (request,response) => {
+    token = request.headers.token
+    usersRepository.getProfile(token).then(res => response.send(JSON.stringify(res)))
+}
+
+exports.getUserProfileById = (request,response) => {
+    id = request.params.id
+    usersRepository.getProfileById(id).then(res => response.send(JSON.stringify(res)))
 }

@@ -1,13 +1,14 @@
 const uuid = require('uuid')
 var passwordHash = require('password-hash');
-const mysqlQueries = require('../constants/mysqlQueries')
-const User = require('../models/User');
 
+const User = require('../models/User');
 const SignIn = require('../responseModels/SignIn');
 const SignUp = require('../responseModels/SignUp');
+const Profile = require('../responseModels/Profile')
 
 const Errors = require('../constants/errors')
 const connection = require('../constants/mysqlConnection')
+const mysqlQueries = require('../constants/mysqlQueries')
 
 module.exports = class UsersRepository {
 
@@ -56,22 +57,13 @@ module.exports = class UsersRepository {
         user.token = uuid.v4();
         connection.query(mysqlQueries.setToken,[user.token,user.login])
     }
-
-    getProfile(token){
-        return this.getByToken(token).then(user => {
-            if(user){
-                return {error:null,name:user.login}
-            }
-            return {error:'Undefined user',name:null}
-        })
-    }
     
     getProfileById(id){
         return this.getById(id).then(user => {
             if(user){
-                return {error:null,name:user.login}
+                return new Profile(user.login,user.id,null)
             }
-            return {error:'Undefined user',name:null}
+            return new Profile(null,null,Errors.UndefinedUser)
         })
     }
 }

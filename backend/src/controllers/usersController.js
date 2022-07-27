@@ -3,10 +3,9 @@ const Validator = require('../services/Validator')
 const SignIn = require('../responseModels/SignIn')
 const SignUp = require('../responseModels/SignUp')
 
-const usersRepository = new UsersRepository();
-const validator = new Validator();
-
 exports.signIn = (request,response) => {
+    let usersRepository = new UsersRepository();
+    let validator = new Validator();
     request.on('data',req => {
         data = JSON.parse(`${req}`)
         if(validator.getValidation(data.login)){
@@ -19,6 +18,8 @@ exports.signIn = (request,response) => {
 }
 
 exports.signUp = (request,response) => {
+    let usersRepository = new UsersRepository();
+    let validator = new Validator();
     request.on('data',req => {
         data = JSON.parse(`${req}`)
         if(validator.getValidation(data.login)){
@@ -31,11 +32,11 @@ exports.signUp = (request,response) => {
 }
 
 exports.getUserProfileByToken = (request,response) => {
-    id = response.user.id
-    usersRepository.getProfileById(id).then(res => response.send(JSON.stringify(res)))
+    let usersRepository = new UsersRepository();
+    usersRepository.getProfileById(response.user.id).then(res => response.send(JSON.stringify(res)))
 }
 
 exports.getUserProfileById = (request,response) => {
-    id = request.params.id
-    usersRepository.getProfileById(id).then(res => response.send(JSON.stringify(res)))
+    let usersRepository = new UsersRepository();
+    usersRepository.getProfileById(request.params.id).then(res => response.send(JSON.stringify(res)))
 }

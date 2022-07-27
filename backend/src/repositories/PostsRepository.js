@@ -14,8 +14,8 @@ module.exports = class PostsRepository {
         })
     }
 
-    getAllPosts(){
-        return connection.query(mysqlRequests.allPosts).then(posts => {
+    getAll(){
+        return connection.query(mysqlQueries.allPosts).then(posts => {
             posts = posts[0]
             return new Posts(null,posts)
         })

@@ -1,4 +1,4 @@
-module.exports = mysqlRequests = {
+module.exports = mysqlQueries = {
     getByToken : 'SELECT * FROM users WHERE token = ?',
     getById: 'SELECT * FROM users WHERE id = ?',
     userPosts: 'SELECT * FROM posts WHERE user_id = ?',

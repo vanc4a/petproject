@@ -1,65 +1,60 @@
 const uuid = require('uuid')
 var passwordHash = require('password-hash');
-const mysqlRequests = require('../constants/mysqlRequests')
+const mysqlQueries = require('../constants/mysqlQueries')
 const User = require('../models/User');
-const Auth = require('../responseModels/Auth');
+
+const SignIn = require('../responseModels/SignIn');
+const SignUp = require('../responseModels/SignUp');
+
 const Errors = require('../constants/errors')
 const connection = require('../constants/mysqlConnection')
 
 module.exports = class UsersRepository {
 
     getByToken(token){
-        return connection.query(mysqlRequests.getByToken,[token]).then(res => {
+        return connection.query(mysqlQueries.getByToken,[token]).then(res => {
             res = res[0][0]
             return res ? new User(res.login,res.password,res.token,res.user_role,res.id) : null
         })
     }
 
-    getByLogin(id){
-        return connection.query(mysqlRequests.login,[id]).then(res => {
+    getByLogin(login){
+        return connection.query(mysqlQueries.login,[login]).then(res => {
             res = res[0][0]
             return res ? new User(res.login,res.password,res.token,res.user_role,res.id) : null
         })
     }
 
     getById(id){
-        return connection.query(mysqlRequests.getById,[id]).then(res => {
+        return connection.query(mysqlQueries.getById,[id]).then(res => {
             res = res[0][0]
             return res ? new User(res.login,res.password,res.token,res.user_role,res.id) : null
         })
     }
 
     signIn(password,login){
-        connsole.log('test')
         return this.getByLogin(login).then(user => {
-            if(user){
-                return passwordHash.verify(password, user.password) ? 
-                (this.setToken(user),new Auth(user.token,null,user.user_role)) :
-                new Auth(null,Errors.IncorrectLogOrPass,null)
+            if(user && passwordHash.verify(password, user.password)){
+                this.updateToken(user)
+                return new SignIn(null,user.token)
             }
-            else {
-                return new Auth(null,Errors.UndefinedUser,null)
-            }
+            return new SignIn(Errors.IncorrectLogOrPass,null)
         })
-    }
-
-    setToken(user){
-        if(!user.token){
-            user.token = uuid.v4();
-            connection.query(mysqlRequests.setToken,[user.token,user.login])
-        }
     }
 
     signUp(password, login){
         return this.getByLogin(login).then(user => {
-            if(!user){
-                return connection.query(mysqlRequests.registration,[login,passwordHash.generate(password),'user'])
-                .then(() => new Auth(null,null,null))
+            if(user){
+                return new SignUp(Errors.AlreadyInUse) 
             }
-            else {
-                return new Auth(null,Errors.AlreadyInUse,null)
-            }
+            return connection.query(mysqlQueries.registration,[login,passwordHash.generate(password),'user'])
+                .then(() => new SignUp(null)).catch(e => new SignUp(e))
         })
+    }
+
+    updateToken(user){
+        user.token = uuid.v4();
+        connection.query(mysqlQueries.setToken,[user.token,user.login])
     }
 
     getProfile(token){

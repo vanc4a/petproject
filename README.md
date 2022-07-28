@@ -21,7 +21,12 @@ For stop all containers
 docker-compose down
 ```
 
+### For formatting backend
 
+```bash
+cd backend
+npx eslint . --fix
+```
 
 
 

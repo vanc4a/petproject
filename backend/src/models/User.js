@@ -1,9 +1,9 @@
 module.exports = class User {
-  constructor(login, password, token, role, id) {
-    this.login = login;
-    this.password = password;
-    this.token = token;
-    this.user_role = role;
-    this.id = id;
+  constructor(user) {
+    this.login = user.login;
+    this.password = user.password;
+    this.token = user.token;
+    this.user_role = user.user_role;
+    this.id = user.id;
   }
 };

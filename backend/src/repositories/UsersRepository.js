@@ -14,21 +14,30 @@ module.exports = class UsersRepository {
   getByToken(token) {
     return connection.query(mysqlQueries.getByToken, [token]).then((res) => {
       res = res[0][0];
-      return res ? new User(res.login, res.password, res.token, res.user_role, res.id) : null;
+      if (!res) {
+        return null;
+      }
+      return new User(res);
     });
   }
 
   getByLogin(login) {
     return connection.query(mysqlQueries.login, [login]).then((res) => {
       res = res[0][0];
-      return res ? new User(res.login, res.password, res.token, res.user_role, res.id) : null;
+      if (!res) {
+        return null;
+      }
+      return new User(res);
     });
   }
 
   getById(id) {
     return connection.query(mysqlQueries.getById, [id]).then((res) => {
       res = res[0][0];
-      return res ? new User(res.login, res.password, res.token, res.user_role, res.id) : null;
+      if (!res) {
+        return null;
+      }
+      return new User(res);
     });
   }
 
@@ -47,8 +56,10 @@ module.exports = class UsersRepository {
       if (user) {
         return new SignUp(Errors.AlreadyInUse);
       }
-      return connection.query(mysqlQueries.registration, [login, passwordHash.generate(password), 'user'])
-          .then(() => new SignUp(null)).catch((e) => new SignUp(e));
+      return connection.query(
+          mysqlQueries.registration,
+          [login, passwordHash.generate(password), 'user']).then(() =>
+        new SignUp(null)).catch((e) => new SignUp(e));
     });
   }
 

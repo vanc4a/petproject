@@ -2,7 +2,7 @@ const UsersRepository = require('./repositories/UsersRepository');
 const Auth = require('./responseModels/Auth');
 const Errors = require('./constants/errors');
 
-exports.Auth = (req, res, next) => {
+exports.auth = (req, res, next) => {
   const usersRepository = new UsersRepository();
   return usersRepository.getByToken(req.headers.token).then((user) => {
     if (!user) {

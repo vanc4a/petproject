@@ -31,7 +31,7 @@ exports.signUp = (request, response) => {
     }
     usersRepository.signUp(data.pass, data.login)
       .then(() => response.send(new SignUp()))
-      .catch((err) => response.send(new Error(err)));
+      .catch((err) => response.status(err.code).send(new Error(err.title)));
   });
 };
 
@@ -39,12 +39,12 @@ exports.getUserProfileByToken = (request, response) => {
   const usersRepository = new UsersRepository();
   usersRepository.getById(response.user.id)
   .then((res) => response.send(new Profile(res)))
-  .catch((err) => response.send(new Error(err)))
+  .catch((err) => response.status(err.code).send(new Error(err.title)))
 };
 
 exports.getUserProfileById = (request, response) => {
   const usersRepository = new UsersRepository();
   usersRepository.getById(request.params.id)
   .then((res) => response.send(new Profile(res)))
-  .catch((err) => response.send(new Error(err)))
+  .catch((err) => response.status(err.code).send(new Error(err.title)))
 };

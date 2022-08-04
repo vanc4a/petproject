@@ -1,20 +1,24 @@
-const Posts = require('../responseModels/Posts');
+const Post = require('../models/mysql/Post');
 const mysqlQueries = require('../constants/mysqlQueries');
 const connection = require('../constants/mysqlConnection');
 
 
 module.exports = class PostsRepository {
+  posts = [];
+
   getById(id) {
     return connection.query(mysqlQueries.userPosts, [id]).then((res) =>{
       res = res[0];
-      return new Posts(null, res);
+      res.map(post => this.posts.push(new Post(post)))
+      return this.posts;
     });
   }
 
   getAll() {
-    return connection.query(mysqlQueries.allPosts).then((posts) => {
-      posts = posts[0];
-      return new Posts(null, posts);
+    return connection.query(mysqlQueries.allPosts).then((res) => {
+      res = res[0];
+      res.map(post => this.posts.push(new Post(post)))
+      return this.posts;
     });
   }
 };

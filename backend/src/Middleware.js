@@ -1,14 +1,21 @@
 const UsersRepository = require('./repositories/UsersRepository');
-const Auth = require('./responseModels/Auth');
-const Errors = require('./constants/errors');
+const Error = require('./models/response/Error')
+
 
 exports.auth = (req, res, next) => {
   const usersRepository = new UsersRepository();
   return usersRepository.getByToken(req.headers.token).then((user) => {
-    if (!user) {
-      return res.send(JSON.stringify(new Auth(Errors.UndefinedUser)));
-    }
     res.user = user;
     next();
-  });
+  }).catch((e) => res.send(new Error(e)));
 };
+exports.requestParser = (req,res,next) => {
+  switch(req.originalUrl){
+    case '/signup':
+      req.on('data',body => {
+
+      })
+      break;
+  }
+  next()
+}

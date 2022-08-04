@@ -1,19 +1,23 @@
 const UsersRepository = require('../repositories/UsersRepository');
 const Validator = require('../services/Validator');
-const SignIn = require('../responseModels/SignIn');
-const SignUp = require('../responseModels/SignUp');
+const SignIn = require('../models/response/SignIn');
+const SignUp = require('../models/response/SignUp');
+const Error = require('../models/response/Error')
+const Profile = require('../models/response/Profile')
+const Errors = require('../constants/errors')
+
 
 exports.signIn = (request, response) => {
   const usersRepository = new UsersRepository();
   const validator = new Validator();
   request.on('data', (req) => {
     data = JSON.parse(`${req}`);
-    if (validator.getValidation(data.login)) {
-      usersRepository.signIn(data.pass, data.login).then((res) =>
-        response.send(JSON.stringify(res)));
-    } else {
-      response.send(JSON.stringify(new SignIn('Only latters', null)));
+    if (!validator.getValidation(data.login)) {
+      response.send(new Error(Errors.ValidateError));
     }
+    usersRepository.signIn(data.pass, data.login)
+      .then((res) => response.send(new SignIn(res)))
+      .catch((e) => response.send(new Error(e)));
   });
 };
 
@@ -22,23 +26,25 @@ exports.signUp = (request, response) => {
   const validator = new Validator();
   request.on('data', (req) => {
     data = JSON.parse(`${req}`);
-    if (validator.getValidation(data.login)) {
-      usersRepository.signUp(data.pass, data.login).then((res) =>
-        response.send(JSON.stringify(res)));
-    } else {
-      response.send(JSON.stringify(new SignUp('Only latters')));
+    if (!validator.getValidation(data.login)) {
+      response.send(new Error(Errors.ValidateError));
     }
+    usersRepository.signUp(data.pass, data.login)
+      .then(() => response.send(new SignUp()))
+      .catch((err) => response.send(new Error(err)));
   });
 };
 
 exports.getUserProfileByToken = (request, response) => {
   const usersRepository = new UsersRepository();
-  usersRepository.getProfileById(response.user.id).then((res) =>
-    response.send(JSON.stringify(res)));
+  usersRepository.getById(response.user.id)
+  .then((res) => response.send(new Profile(res)))
+  .catch((err) => response.send(new Error(err)))
 };
 
 exports.getUserProfileById = (request, response) => {
   const usersRepository = new UsersRepository();
-  usersRepository.getProfileById(request.params.id).then((res) =>
-    response.send(JSON.stringify(res)));
+  usersRepository.getById(request.params.id)
+  .then((res) => response.send(new Profile(res)))
+  .catch((err) => response.send(new Error(err)))
 };

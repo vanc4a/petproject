@@ -1,6 +1,5 @@
 module.exports = class SignIn {
-  constructor(err, token) {
-    this.error = err;
+  constructor(token) {
     this.token = token;
   }
 };

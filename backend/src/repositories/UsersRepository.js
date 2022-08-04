@@ -1,10 +1,7 @@
 const uuid = require('uuid');
 const passwordHash = require('password-hash');
 
-const User = require('../models/User');
-const SignIn = require('../responseModels/SignIn');
-const SignUp = require('../responseModels/SignUp');
-const Profile = require('../responseModels/Profile');
+const User = require('../models/mysql/User');
 
 const Errors = require('../constants/errors');
 const connection = require('../constants/mysqlConnection');
@@ -15,7 +12,7 @@ module.exports = class UsersRepository {
     return connection.query(mysqlQueries.getByToken, [token]).then((res) => {
       res = res[0][0];
       if (!res) {
-        return null;
+        throw Errors.UndefinedUser
       }
       return new User(res);
     });
@@ -25,7 +22,7 @@ module.exports = class UsersRepository {
     return connection.query(mysqlQueries.login, [login]).then((res) => {
       res = res[0][0];
       if (!res) {
-        return null;
+        return null
       }
       return new User(res);
     });
@@ -35,7 +32,7 @@ module.exports = class UsersRepository {
     return connection.query(mysqlQueries.getById, [id]).then((res) => {
       res = res[0][0];
       if (!res) {
-        return null;
+        throw Errors.UndefinedUser
       }
       return new User(res);
     });
@@ -43,37 +40,27 @@ module.exports = class UsersRepository {
 
   signIn(password, login) {
     return this.getByLogin(login).then((user) => {
-      if (user && passwordHash.verify(password, user.password)) {
-        this.updateToken(user);
-        return new SignIn(null, user.token);
+      if (!(user && passwordHash.verify(password, user.password))) {
+        throw Errors.IncorrectLogOrPass;
       }
-      return new SignIn(Errors.IncorrectLogOrPass, null);
+      this.updateToken(user);
+      return user.token;
     });
   }
 
   signUp(password, login) {
     return this.getByLogin(login).then((user) => {
       if (user) {
-        return new SignUp(Errors.AlreadyInUse);
+        throw Errors.AlreadyInUse;
       }
       return connection.query(
           mysqlQueries.registration,
-          [login, passwordHash.generate(password), 'user']).then(() =>
-        new SignUp(null)).catch((e) => new SignUp(e));
+          [login, passwordHash.generate(password), 'user']);
     });
   }
 
   updateToken(user) {
     user.token = uuid.v4();
     connection.query(mysqlQueries.setToken, [user.token, user.login]);
-  }
-
-  getProfileById(id) {
-    return this.getById(id).then((user) => {
-      if (user) {
-        return new Profile(user.login, user.id, null);
-      }
-      return new Profile(null, null, Errors.UndefinedUser);
-    });
   }
 };

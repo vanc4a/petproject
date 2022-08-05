@@ -5,8 +5,8 @@ const middleware = require('./Middleware');
 
 const Router = express.Router();
 
-Router.post('/signin', usersController.signIn);
-Router.post('/signup', usersController.signUp);
+Router.post('/signin',middleware.requestParser,usersController.signIn);
+Router.post('/signup',middleware.requestParser, usersController.signUp);
 
 Router.get('/profile',middleware.auth, usersController.getUserProfileByToken);
 Router.get('/profile/:id', usersController.getUserProfileById);

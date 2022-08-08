@@ -1,6 +1,5 @@
 module.exports = class Error {
-    constructor(msg) {
-        this.error = msg;
-    }
-  };
-  
+  constructor(msg) {
+    this.error = msg;
+  }
+};

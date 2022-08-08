@@ -1,16 +1,16 @@
-const Errors = require('../../constants/errors')
+const Errors = require('../../constants/errors');
 const acceptSymbols = /^[a-zA-Z0-9]+$/;
 
 module.exports = class SignIn {
-    constructor(req){
-    this.validate(req)
+  constructor(req) {
     this.login = req.login;
-    this.password = req.pass
+    this.password = req.pass;
+    this.validate();
+  }
+  validate() {
+    if (acceptSymbols.test(this.password) && acceptSymbols.test(this.login)) {
+      return;
     }
-    validate(req){
-    if(acceptSymbols.test(req.pass) && acceptSymbols.test(req.login)){
-        return
-    }
-    throw Errors.ValidateError
-    }
-}
+    throw Errors.ValidateError;
+  }
+};

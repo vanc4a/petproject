@@ -6,4 +6,5 @@ module.exports = mysqlQueries = {
   login: 'SELECT * FROM users WHERE login = ?',
   registration: 'INSERT INTO users(login,password,user_role) VALUES(?,?,?)',
   setToken: 'UPDATE users set token = ? WHERE login = ?',
+  post: 'INSERT INTO posts(user_id,image,description) VALUES(?,?,?)',
 };

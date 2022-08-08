@@ -1,5 +1,5 @@
 const PostsRepository = require('../repositories/PostsRepository');
-const Posts = require('../models/response/Posts')
+const Posts = require('../models/response/Posts');
 
 exports.getByToken = (request, response) => {
   const postsRepository = new PostsRepository();
@@ -17,4 +17,10 @@ exports.getById = (request, response) => {
   const postsRepository = new PostsRepository();
   postsRepository.getById(request.params.id).then((res) =>
     response.send(res));
+};
+
+exports.addPost = (request, response) => {
+  const postsRepository = new PostsRepository();
+  postsRepository.post(response.body, response.user).then(() =>
+    response.status(200).send());
 };

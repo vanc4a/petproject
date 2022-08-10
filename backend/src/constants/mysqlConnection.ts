@@ -1,6 +1,6 @@
-const mysql = require('mysql2');
+import {createConnection} from 'mysql2';
 
-module.exports = connection = mysql.createConnection({
+export default createConnection({
   host: 'mysql_server',
   user: 'test',
   database: 'pet_project',

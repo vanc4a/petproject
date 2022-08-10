@@ -2,10 +2,9 @@
   "name": "server_app",
   "version": "1.0.0",
   "description": "Server",
-  "main": "server.js",
+  "main": "dist/serverside.js",
   "scripts": {
-    "main": "serverside.js",
-    "start": "node serverside.js"
+    "start": "tsc && nodemon dist/serverside.js -e 'ts,json' -x 'tsc && node dist/serverside.js'"
   },
   "author": "vanc4a",
   "license": "ISC",
@@ -19,6 +18,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/express": "^4.16.1",
     "@typescript-eslint/eslint-plugin": "^5.31.0",
     "@typescript-eslint/parser": "^5.31.0",
     "eslint": "^8.20.0",

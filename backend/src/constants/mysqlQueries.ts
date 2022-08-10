@@ -1,4 +1,4 @@
-module.exports = mysqlQueries = {
+export default {
   getByToken: 'SELECT * FROM users WHERE token = ?',
   getById: 'SELECT * FROM users WHERE id = ?',
   userPosts: 'SELECT * FROM posts WHERE user_id = ?',

@@ -1,18 +1,18 @@
-const UsersRepository = require('./repositories/UsersRepository');
-const Error = require('./models/response/Error');
-const SignUp = require('./models/request/SignUp');
-const SignIn = require('./models/request/SignIn');
-const Post = require('./models/request/Post');
+import UsersRepository from './repositories/UsersRepository'
+import Error from './models/response/Error';
+import SignIn from './models/request/SignIn';
+import SignUp from './models/request/SignUp';
+import Post from './models/request/Post';
 
-exports.auth = (req, res, next) => {
+export const auth = (req, res, next) => {
   const usersRepository = new UsersRepository();
-  return usersRepository.getByToken(req.headers.token).then((user) => {
+  usersRepository.getByToken(req.headers.token).then((user) => {
     res.user = user;
     next();
   }).catch((e) => res.status(401).send(new Error(e)));
 };
 
-exports.requestParser = (req, res, next) => {
+export const requestParser = (req, res, next) => {
   try {
     switch (req.originalUrl) {
       case '/signup':

@@ -1,7 +1,9 @@
-const Errors = require('../../constants/errors');
+import Errors from "../../constants/errors";
 const acceptSymbols = /^[a-zA-Z0-9]+$/;
 
-module.exports = class SignUp {
+export default class SignUp {
+  login: string;
+  password: string;
   constructor(req) {
     this.validate(req);
     this.login = req.login;

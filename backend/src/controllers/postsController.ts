@@ -1,26 +1,25 @@
-const PostsRepository = require('../repositories/PostsRepository');
-const Posts = require('../models/response/Posts');
+import PostsRepository from '../repositories/PostsRepository'
 
-exports.getByToken = (request, response) => {
+export const getByToken = (request, response) => {
   const postsRepository = new PostsRepository();
   postsRepository.getById(response.user.id).then((res) =>
     response.send(res));
 };
 
-exports.getAll = (request, response) => {
+export const getAll = (request, response) => {
   const postsRepository = new PostsRepository();
   postsRepository.getAll().then((res) =>
     response.send(res));
 };
 
-exports.getById = (request, response) => {
+export const getById = (request, response) => {
   const postsRepository = new PostsRepository();
   postsRepository.getById(request.params.id).then((res) =>
     response.send(res));
 };
 
-exports.addPost = (request, response) => {
+export const addPost = (request, response) => {
   const postsRepository = new PostsRepository();
-  postsRepository.post(response.body, response.user).then(() =>
+  postsRepository.post(response.body, response.user.id).then(() =>
     response.status(200).send());
 };

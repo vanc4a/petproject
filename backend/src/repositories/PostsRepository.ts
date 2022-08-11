@@ -1,12 +1,12 @@
-import Post from '../interfaces/db/Post'
+import Post from '../interfaces/db/Post';
 import connection from '../constants/mysqlConnection';
 import mysqlQueries from '../constants/mysqlQueries';
 
 export default class PostsRepository {
-  posts = [];
+  posts: Post[];
 
   getById(id: number): Promise<Post[]> {
-    return connection.query(mysqlQueries.userPosts, [id]).then((res: any) =>{
+    return connection.query(mysqlQueries.userPosts, [id]).then((res: any) => {
       this.posts = res[0];
       return this.posts;
     });
@@ -24,4 +24,4 @@ export default class PostsRepository {
       post.image,
       post.description]);
   }
-};
+}

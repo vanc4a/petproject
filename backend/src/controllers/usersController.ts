@@ -1,33 +1,32 @@
+import { Request } from 'express';
 import UsersRepository from '../repositories/UsersRepository';
-import SignIn from '../models/response/SignIn';
-import Error from '../models/response/Error'
-import Profile from '../models/response/Profile'
+import Response from '../interfaces/IResponse';
 
-export const signIn = (request, response) => {
+export const signIn = (request: Request, response: Response) => {
   const usersRepository = new UsersRepository();
-  let user = response.body
+  const user = response.body;
   usersRepository.signIn(user)
-      .then((res) => response.send(new SignIn(res)))
-      .catch((err) => response.status(400).send(new Error(err)));
+    .then((res) => response.send({token:res}))
+    .catch((err) => response.status(400).send({message:err}));
 };
 
-export const signUp = (request, response) => {
+export const signUp = (request: Request, response: Response) => {
   const usersRepository = new UsersRepository();
   usersRepository.signUp(response.body)
-      .then(() => response.send())
-      .catch((err) => response.status(400).send(new Error(err)));
+    .then(() => response.send(null))
+    .catch((err) => response.status(400).send({message:err}));
 };
 
-export const getUserProfileByToken = (request, response) => {
+export const getUserProfileByToken = (request: Request, response: Response) => {
   const usersRepository = new UsersRepository();
   usersRepository.getById(response.user.id)
-      .then((res) => response.send(new Profile(res)))
-      .catch((err) => response.status(401).send(new Error(err)));
+    .then((res) => response.send({name:res.login,id:res.id}))
+    .catch((err) => response.status(401).send({message:err}));
 };
 
-export const getUserProfileById = (request, response) => {
+export const getUserProfileById = (request: Request, response: Response) => {
   const usersRepository = new UsersRepository();
   usersRepository.getById(request.params.id)
-      .then((res) => response.send(new Profile(res)))
-      .catch((err) => response.status(400).send(new Error(err)));
+    .then((res) => response.send({name:res.login,id:res.id}))
+    .catch((err) => response.status(400).send({message:err}));
 };

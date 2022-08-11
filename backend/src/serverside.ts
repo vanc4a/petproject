@@ -1,7 +1,7 @@
-import express from 'express'
+import express from 'express';
+import bodyParser from 'body-parser';
 import Router from './Router';
-import bodyParser from 'body-parser'
-import {requestParser} from './Middleware'
+import { requestParser } from './Middleware';
 
 const app = express();
 

@@ -1,4 +1,4 @@
-import {createConnection} from 'mysql2';
+import { createConnection } from 'mysql2';
 
 export default createConnection({
   host: 'mysql_server',

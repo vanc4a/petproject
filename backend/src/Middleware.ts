@@ -1,20 +1,22 @@
-import UsersRepository from './repositories/UsersRepository'
-import Error from './models/response/Error';
+import { NextFunction, Request } from 'express';
+import UsersRepository from './repositories/UsersRepository';
 import SignIn from './models/request/SignIn';
 import SignUp from './models/request/SignUp';
 import Post from './models/request/Post';
+import Response from './interfaces/IResponse';
+import User from './interfaces/db/User';
 
-export const auth = (req, res, next) => {
+export const auth = (req: Request, res: Response, next: NextFunction) => {
   const usersRepository = new UsersRepository();
-  usersRepository.getByToken(req.headers.token).then((user) => {
+  usersRepository.getByToken(req.header('token')).then((user: User) => {
     res.user = user;
     next();
   }).catch((e) => res.status(401).send(new Error(e)));
 };
 
-export const requestParser = (req, res, next) => {
+export const requestParser = (req: Request, res: Response, next: NextFunction) => {
   try {
-    switch (req.originalUrl) {
+    switch (req.url) {
       case '/signup':
         res.body = new SignUp(req.body);
         break;
@@ -27,8 +29,6 @@ export const requestParser = (req, res, next) => {
     }
     next();
   } catch (e) {
-    res.status(400).send(new Error(e));
+    res.status(400).send(e);
   }
 };
-
-

@@ -11,7 +11,7 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
   usersRepository.getByToken(req.header('token')).then((user: User) => {
     res.user = user;
     next();
-  }).catch((e) => res.status(401).send(new Error(e)));
+  }).catch((e) => res.status(401).send({message:e}));
 };
 
 export const requestParser = (req: Request, res: Response, next: NextFunction) => {
@@ -29,6 +29,6 @@ export const requestParser = (req: Request, res: Response, next: NextFunction) =
     }
     next();
   } catch (e) {
-    res.status(400).send(e);
+    res.status(400).send({message:e});
   }
 };

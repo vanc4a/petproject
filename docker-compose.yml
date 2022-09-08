@@ -1,4 +1,13 @@
 services: 
+  minio:
+    image: 'bitnami/minio:latest'
+    ports: 
+      - '9001:9001'
+      - '9000:9000'
+    environment:
+      - MINIO_ROOT_USER=minio-root-user
+      - MINIO_ROOT_PASSWORD=minio-root-password
+      - MINIO_DEFAULT_BUCKETS=img:public
   mysql_server:
     image: mysql
     build: ./db_migration
@@ -9,17 +18,25 @@ services:
       - MYSQL_ROOT_PASSWORD=1234
     volumes:
       - db:/var/lib/mysql
+    depends_on: 
+      - minio
   app:
     restart: always
     build: 
       context: ./backend
       dockerfile: Dockerfile
-    ports: 
-      - 3000:3000
     volumes: 
       - ./backend:/app
       - '/app/node_modules'
     depends_on: 
       - mysql_server
+  web:
+    build:
+      dockerfile: nginx/Dockerfile
+      context: ./
+    ports:
+      - '3000:3000'
+    depends_on:
+      - app
 volumes: 
   db:

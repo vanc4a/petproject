@@ -19,9 +19,9 @@ export default class PostsRepository {
     });
   }
 
-  post(post: Post, userId: number) {
+  post(post: Post, userId: number, userLogin: string) {
     return connection.query(mysqlQueries.post, [userId,
       post.image,
-      post.description]);
+      post.description,userLogin]);
   }
 }

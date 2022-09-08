@@ -8,6 +8,7 @@ import User from './interfaces/db/User';
 
 export const auth = (req: Request, res: Response, next: NextFunction) => {
   const usersRepository = new UsersRepository();
+  console.log(req.header('token') + 'token')
   usersRepository.getByToken(req.header('token')).then((user: User) => {
     res.user = user;
     next();

@@ -1,8 +1,8 @@
 import { createConnection } from 'mysql2';
 
 export default createConnection({
-  host: 'mysql_server',
-  user: 'test',
-  database: 'pet_project',
-  password: '1234',
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  database: process.env.MYSQL_DATABASE,
+  password: process.env.MYSQL_PASSWORD,
 }).promise();

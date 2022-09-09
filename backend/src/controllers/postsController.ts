@@ -1,13 +1,6 @@
 import PostsRepository from '../repositories/PostsRepository';
-const minio = require('minio')
-
-const Client = new minio.Client({
-    endPoint: 'minio',
-    port: 9000,
-    useSSL: false,
-    accessKey: 'minio-root-user',
-    secretKey: 'minio-root-password'
-})
+import fs from 'fs'
+import minioConnection from '../constants/minioConnection';
 
 export const getByToken = (request, response) => {
   const postsRepository = new PostsRepository();
@@ -30,8 +23,9 @@ export const addPost = (request, response) => {
 };
 
 export const upload = (request, response) => {
-  Client.fPutObject('img', `${request.file.filename}.png`, request.file.path, function(err, etag) {
+  minioConnection.fPutObject('img', `${request.file.filename}.png`, `${request.file.path}`, {'Content-Type':'image/png'}, function(err, etag) {
+    fs.unlink(request.file.path,(err) => console.log(err))
     if (err) return console.log(err)
-    response.send(request.file.filename)
+    response.send(request.file.filename + '.png')
   });
 };

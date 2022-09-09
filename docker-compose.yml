@@ -5,22 +5,30 @@ services:
       - '9001:9001'
       - '9000:9000'
     environment:
-      - MINIO_ROOT_USER=minio-root-user
-      - MINIO_ROOT_PASSWORD=minio-root-password
-      - MINIO_DEFAULT_BUCKETS=img:public
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MINIO_DEFAULT_BUCKETS=${MINIO_DEFAULT_BUCKETS}
   mysql_server:
     image: mysql
     build: ./db_migration
     environment: 
-      - MYSQL_DATABASE=pet_project
-      - MYSQL_USER=test
-      - MYSQL_PASSWORD=1234
-      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - db:/var/lib/mysql
     depends_on: 
       - minio
   app:
+    environment:
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MINIO_HOST=${MINIO_HOST}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
     restart: always
     build: 
       context: ./backend

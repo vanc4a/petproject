@@ -19,14 +19,14 @@ export const signUp = (request: Request, response: Response) => {
 
 export const getUserProfileByToken = (request: Request, response: Response) => {
   const usersRepository = new UsersRepository();
-  usersRepository.getById(response.user.id)
+  usersRepository.getById(Number(response.user.id))
     .then((res) => response.send({name:res.login,id:res.id}))
     .catch((err) => response.status(401).send({message:err}));
 };
 
 export const getUserProfileById = (request: Request, response: Response) => {
   const usersRepository = new UsersRepository();
-  usersRepository.getById(request.params.id)
+  usersRepository.getById(Number(request.params.id))
     .then((res) => response.send({name:res.login,id:res.id}))
     .catch((err) => response.status(400).send({message:err}));
 };

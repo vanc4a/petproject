@@ -1,12 +1,15 @@
 import React,{useState} from "react";
-import { TextField, Button, Stack, Alert} from "@mui/material";
+import { TextField, Button, Stack } from "@mui/material";
 import {SendOutlined} from '@mui/icons-material'
+import {setToken}  from '../redux/slices/tokenSlice' 
+import {setError} from '../redux/slices/errorSlice' 
+import { useDispatch } from "react-redux";
 
-const SignIn = ({setToken}) => {
+const SignIn = () => {
 
     const [pass,setPass] = useState(null)
     const [login,setLogin] = useState(null)
-    const [error,setError] = useState(null)
+    const dispatch = useDispatch();
 
     const SignInFetch = () => {
         fetch('http://localhost:3000/api/signin',{
@@ -18,9 +21,9 @@ const SignIn = ({setToken}) => {
         }).then(res => res.json()
         .then(body => {
             if(!res.ok){
-                return setError(body.message)
+                return dispatch(setError(body.message))
             }
-            setToken(body.token)
+            dispatch(setToken(body.token))
         }))
     }
 
@@ -46,7 +49,6 @@ const SignIn = ({setToken}) => {
                 >
         Login
         </Button>
-        {error ? <Alert sx={{width:1}} variant="filled" severity="error">{error}</Alert> : null}
     </Stack>)
 }
 

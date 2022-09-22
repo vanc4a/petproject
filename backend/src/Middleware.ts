@@ -5,7 +5,6 @@ import SignUp from './models/request/SignUp';
 import Post from './models/request/Post';
 import Response from './interfaces/IResponse';
 import User from './interfaces/db/User';
-import * as Jimp from 'jimp';
 
 export const auth = (req: Request, res: Response, next: NextFunction) => {
   const usersRepository = new UsersRepository();
@@ -17,6 +16,7 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const requestParser = (req: Request, res: Response, next: NextFunction) => {
+  console.log(req.body)
   try {
     switch (req.url) {
       case '/signup':
@@ -34,10 +34,3 @@ export const requestParser = (req: Request, res: Response, next: NextFunction) =
     res.status(400).send({message:e});
   }
 };
-
-export const imageProcessor = (req,res,next) => {
-  Jimp.read(req.file.path).then(file => {
-    file.resize(1000,Jimp.AUTO)
-    file.writeAsync(req.file.path).then(() => next())
-  }).catch(err => res.status(400).send('Unsupported format!'))
-}

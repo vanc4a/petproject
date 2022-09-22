@@ -1,18 +1,17 @@
 import {useState} from "react";
 import { TextField, Button, Typography, Stack, Alert} from "@mui/material";
 import {SendOutlined} from '@mui/icons-material'
+import {setError} from '../redux/slices/errorSlice' 
+import { useDispatch } from "react-redux";
 
 const SignUp = ({setProcess}) => {
 
     const [pass,setPass] = useState(null)
     const [passValidation,setValidation] = useState(null)
     const [login,setLogin] = useState(null)
-    const [error,setError] = useState(null)
+    const dispatch = useDispatch();
 
     const SignUpFetch = () => {
-        if(pass !== passValidation){
-            return setError('Passwords should be equal!')
-        }
         fetch('http://localhost:3000/api/signup',{
         method:"post",
         headers: {
@@ -22,7 +21,7 @@ const SignUp = ({setProcess}) => {
         }).then(res => {
             console.log(res.ok)
             if(!res.ok){
-                return 
+                res.json().then(body => dispatch(setError(body.message)))
             }
             setProcess(true)
         })
@@ -51,6 +50,7 @@ const SignUp = ({setProcess}) => {
                     type='password'
                     />
         <Button 
+                disabled={pass === passValidation ? false : true}
                 sx={{mt:2,mb:1,width:1}}
                 variant="contained" 
                 endIcon={<SendOutlined />}
@@ -58,7 +58,6 @@ const SignUp = ({setProcess}) => {
                 >
         Register
         </Button>
-        {error ? <Alert sx={{width:1}} variant="filled" severity="error">{error}</Alert> : null}
     </Stack>)
 }
 

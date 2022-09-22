@@ -7,9 +7,8 @@ const upload = multer({dest:'./tmp'});
 
 const app = express();
 
-console.log(process.env)
-
 app.use('/api',(req,res,next) =>{
+    console.log(req.headers)
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "*");
     res.setHeader("Access-Control-Allow-Headers", "origin, content-type, accept, token, file");

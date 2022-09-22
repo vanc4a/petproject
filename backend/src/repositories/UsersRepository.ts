@@ -30,7 +30,7 @@ export default class UsersRepository {
     });
   }
 
-  getById(id:string): Promise<User> {
+  getById(id:number): Promise<User> {
     return connection.query(mysqlQueries.getById, [id]).then((res: any) => {
       this.user = res[0][0];
       if (!this.user) {

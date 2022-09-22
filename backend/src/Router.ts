@@ -5,7 +5,7 @@ import {
 import {
   signIn, signUp, getUserProfileById, getUserProfileByToken,
 } from './controllers/usersController';
-import { auth, imageProcessor} from './Middleware';
+import { auth } from './Middleware';
 
 const Router = express.Router();
 
@@ -21,6 +21,6 @@ Router.post('/posts', auth, addPost);
 Router.get('/posts/all', getAll);
 Router.get('/posts/:id', getById);
 
-Router.post('/upload', imageProcessor, upload)
+Router.post('/upload', upload)
 
 export default Router;

@@ -3,5 +3,5 @@ export default interface User {
     password: string;
     token: string;
     user_role: string;
-    id: string;
+    id: number;
   }

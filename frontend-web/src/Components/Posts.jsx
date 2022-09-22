@@ -1,6 +1,4 @@
 import {useEffect,useState} from 'react';
-import ImageList from '@mui/material/ImageList'
-import ImageListItem  from "@mui/material/ImageListItem";
 import ListItem from './ListItem';
 
 const Posts = () => {

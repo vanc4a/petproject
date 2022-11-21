@@ -2,24 +2,38 @@
   "name": "server_app",
   "version": "1.0.0",
   "description": "Server",
-  "main": "server.js",
+  "main": "dist/serverside.js",
   "scripts": {
-    "main": "serverside.js",
-    "start": "node serverside.js"
+    "start": "tsc && nodemon -e 'ts,json' -x 'tsc && node dist/serverside.js'",
+    "lint": "eslint --fix --ignore-path .eslintignore --ext .ts ."
   },
   "author": "vanc4a",
   "license": "ISC",
   "dependencies": {
+    "@jimp/types": "^0.16.1",
+    "@types/multer": "^1.4.7",
+    "body-parser": "^1.20.0",
+    "core-js": "^3.25.1",
+    "cors": "^2.8.5",
     "express": "^4.18.1",
+    "jimp": "^0.16.1",
+    "joi": "^17.6.0",
     "js-md4": "^0.3.2",
+    "minio": "^7.0.32",
+    "multer": "^1.4.5-lts.1",
     "mysql2": "^2.3.3",
     "password-hash": "^1.2.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.31.0",
-    "@typescript-eslint/parser": "^5.31.0",
-    "eslint": "^8.20.0",
-    "eslint-config-google": "^0.14.0"
+    "@types/express": "^4.16.1",
+    "@types/minio": "^7.0.13",
+    "@typescript-eslint/eslint-plugin": "^5.33.0",
+    "@typescript-eslint/parser": "^5.33.0",
+    "eslint": "^8.21.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.26.0",
+    "typescript": "^4.7.4"
   }
 }

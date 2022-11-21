@@ -25,7 +25,7 @@ docker-compose down
 
 ```bash
 cd backend
-npx eslint . --fix
+npm run lint --fix
 ```
 
 

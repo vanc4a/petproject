@@ -11,6 +11,7 @@ CREATE TABLE posts (
   user_id         int,
   id              int NOT NULL AUTO_INCREMENT,
   image           VARCHAR(100),
-  description     VARCHAR(100),
+  description     VARCHAR(400),
+  user_login      VARCHAR(30),
   PRIMARY KEY (id)
 );
